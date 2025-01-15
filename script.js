@@ -16,26 +16,33 @@ fetch('highscore.txt')
     .then(data => {
         highScore = parseInt(data) || 0;
         document.getElementById('highscore').textContent = highScore;
-    });
+    })
+    .catch(err => console.error('Error loading highscore:', err));
 
 document.addEventListener('keydown', changeDirection);
 
-document.getElementById('up').addEventListener('click', () => {
-    if (direction !== 'DOWN') direction = 'UP';
-});
+const upButton = document.getElementById('up');
+const downButton = document.getElementById('down');
+const leftButton = document.getElementById('left');
+const rightButton = document.getElementById('right');
 
-document.getElementById('down').addEventListener('click', () => {
-    if (direction !== 'UP') direction = 'DOWN';
-});
+if (upButton && downButton && leftButton && rightButton) {
+    upButton.addEventListener('click', () => {
+        if (direction !== 'DOWN') direction = 'UP';
+    });
 
-document.getElementById('left').addEventListener('click', () => {
-    if (direction !== 'RIGHT') direction = 'LEFT';
-});
+    downButton.addEventListener('click', () => {
+        if (direction !== 'UP') direction = 'DOWN';
+    });
 
-document.getElementById('right').addEventListener('click', () => {
-    if (direction !== 'LEFT') direction = 'RIGHT';
-});
+    leftButton.addEventListener('click', () => {
+        if (direction !== 'RIGHT') direction = 'LEFT';
+    });
 
+    rightButton.addEventListener('click', () => {
+        if (direction !== 'LEFT') direction = 'RIGHT';
+    });
+}
 
 function changeDirection(event) {
     if (event.key === 'ArrowUp' && direction !== 'DOWN') direction = 'UP';
@@ -119,7 +126,7 @@ function saveHighScore() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ highscore: highScore })
-    });
+    }).catch(err => console.error('Error saving highscore:', err));
 }
 
 setInterval(drawGame, 100);
